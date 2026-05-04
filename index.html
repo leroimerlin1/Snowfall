@@ -106,8 +106,6 @@ color:var(–neon-cyan); text-shadow:0 0 12px rgba(0,229,255,0.7);
 .compact-select { flex:1; height:44px; font-size:14px; padding:0 32px 0 14px; font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:600; background:var(–surface); border:1.5px solid var(–border-magenta); border-radius:14px; color:var(–text-light); appearance:none; -webkit-appearance:none; cursor:pointer; outline:none; transition:border-color 0.2s,box-shadow 0.2s; background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘12’ height=‘12’ viewBox=‘0 0 12 12’%3E%3Cpath fill=’%23e040fb’ d=‘M6 8L1 3h10z’/%3E%3C/svg%3E”); background-repeat:no-repeat; background-position:right 12px center; background-color:var(–surface); }
 .compact-select:focus { border-color:var(–neon-magenta); box-shadow:0 0 12px rgba(224,64,251,0.3); }
 .compact-select option { background:#1a0030; color:var(–text-light); }
-.reset-btn { width:44px; height:44px; flex-shrink:0; background:var(–surface); border:1.5px solid var(–border-magenta); border-radius:14px; color:var(–neon-magenta); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-.reset-btn:active { background:rgba(224,64,251,0.15); border-color:var(–neon-magenta); transform:rotate(180deg) scale(0.93); }
 
 /* ── CARDS ── */
 #products-grid { padding:0 16px 16px; display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
@@ -533,7 +531,7 @@ const products = {
   },
   dry_sift: {
     key:'dry_sift', title:'DRY SIFT GUSH MINTZ 2026 ⭐️🍯☄️', category:'No Farm', farm:'No Farm',
-    image:'dry_sift.jpg',
+    image:'dry_sift.png',
     strain:'', description:'',
     quantities:[{qty:'25g',price:'150€'},{qty:'50g',price:'250€'},{qty:'100g',price:'420€'}]
   }
