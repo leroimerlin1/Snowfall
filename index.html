@@ -265,7 +265,7 @@ nav { position:fixed; bottom:18px; left:12px; right:12px; height:64px; backgroun
   <div id="products-header">
     <div class="products-title"><span style="font-size:1.4rem">🛍️</span>Catalogue</div>
     <div id="products-count-modern" class="products-count">
-      <div class="products-count-number">6</div>
+      <div class="products-count-number">7</div>
       <div class="products-count-label">Produits</div>
     </div>
   </div>
@@ -434,7 +434,7 @@ RAPIDITÉ EFFICACITÉ AINSI QUE QUALITÉ ASSURÉE.
   </div>
 </div>
 
-<!-- AVIS (stockage localStorage) -->
+<!-- AVIS -->
 <div id="avis-page" style="display:none;padding:16px 16px 110px 16px">
   <h2 class="section-title">⭐ Avis clients</h2>
   <div class="info-card" style="margin-bottom:20px">
@@ -490,39 +490,46 @@ if (tg) {
 const products = {
   point_noir: {
     key:'point_noir', title:'Point noir ⚫️', category:'Héro 🧱', farm:'Héro 🧱',
-    image:'point_noir.jpg',
+    image:'point_noir.jpg', video:null,
     strain:'', description:'',
     quantities:[{qty:'5g',price:'80€'},{qty:'10g',price:'180€'},{qty:'30g',price:'350€'},{qty:'50g',price:'650€'}]
   },
   purosangue: {
     key:'purosangue', title:'PUROSANGUE 🔞 1.1', category:'Héro 🧱', farm:'Héro 🧱',
-    image:'purosangue.jpg',
+    image:'purosangue.jpg', video:null,
     strain:'', description:'L\'équipe qualité de malade ! Si vous êtes jeune consommateur, consommer avec modération ! 🤯💯🏆\n\nLa PURO se vend minimum 40€ le gramme de base, et la URUS minimum 30€, c\'est pas d\'la soupe, les prix sont très arrangeants ! 🤩🤩🤩',
     quantities:[{qty:'10g',price:'280€'},{qty:'20g',price:'540€'},{qty:'50g',price:'1200€'},{qty:'100g',price:'1900€'}]
   },
   urus: {
     key:'urus', title:'URUS 🚘 1.1', category:'Héro 🧱', farm:'Héro 🧱',
-    image:'urus.jpg',
+    image:'urus.jpg', video:null,
     strain:'', description:'L\'équipe qualité de malade ! Si vous êtes jeune consommateur, consommer avec modération ! 🤯💯🏆\n\nLa PURO se vend minimum 40€ le gramme de base, et la URUS minimum 30€, c\'est pas d\'la soupe, les prix sont très arrangeants ! 🤩🤩🤩',
     quantities:[{qty:'10g',price:'200€'},{qty:'20g',price:'370€'},{qty:'50g',price:'850€'},{qty:'100g',price:'1500€'}]
   },
   blanche: {
     key:'blanche', title:'Blanche ❄️', category:'Blanche ❄️', farm:'Blanche ❄️',
-    image:'blanche.jpg',
+    image:'blanche.jpg', video:null,
     strain:'', description:'',
     quantities:[{qty:'1g',price:'50€'},{qty:'2g',price:'100€'},{qty:'3g',price:'150€'},{qty:'5g',price:'250€'},{qty:'10g',price:'400€'}]
   },
   olive: {
     key:'olive', title:'Olive 🫒 ❄️', category:'Blanche ❄️', farm:'Blanche ❄️',
-    image:'olive.jpg',
+    image:'olive.jpg', video:null,
     strain:'', description:'',
     quantities:[{qty:'1g',price:'60€'},{qty:'2g',price:'120€'},{qty:'3g',price:'170€'},{qty:'5g',price:'270€'},{qty:'10g',price:'450€'}]
   },
   dry_sift: {
     key:'dry_sift', title:'DRY SIFT GUSH MINTZ 2026 ⭐️🍯☄️', category:'No Farm', farm:'No Farm',
-    image:'dry_sift.png',
+    image:'dry_sift.png', video:null,
     strain:'', description:'',
     quantities:[{qty:'25g',price:'150€'},{qty:'50g',price:'250€'},{qty:'100g',price:'420€'}]
+  },
+  // ── NOUVEAU PRODUIT ──
+  jaune_mousseux: {
+    key:'jaune_mousseux', title:'🟡Jaune mousseux 🧽', category:'No Farm', farm:'No Farm',
+    image:'jaune.jpg', video:'jaune.mp4',
+    strain:'', description:'',
+    quantities:[{qty:'5g',price:'40€'},{qty:'10g',price:'80€'},{qty:'50g',price:'180€'},{qty:'100g',price:'350€'}]
   }
 };
 
@@ -595,19 +602,80 @@ function goToHome() {
   scrollToTop();
 }
 
-// ── PRODUCT IMAGE DISPLAY ──
-function buildProductImage(imageSrc) {
+// ── SWIPER (image + vidéo) ──
+let swiperIndex = 0;
+let swiperItems = [];
+
+function buildProductMedia(imageSrc, videoSrc) {
   const track = document.getElementById('swiper-track');
+  const counter = document.getElementById('swiper-counter');
+  const btnPrev = document.querySelector('.swiper-btn-prev');
+  const btnNext = document.querySelector('.swiper-btn-next');
   track.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = imageSrc || 'chat.PNG';
-  img.style.cssText = 'flex-shrink:0;width:100%;height:100%;object-fit:cover;background:#0e0018;pointer-events:none;user-select:none;';
-  track.appendChild(img);
-  // Hide swiper controls — single image
-  document.querySelector('.swiper-btn-prev').style.display = 'none';
-  document.querySelector('.swiper-btn-next').style.display = 'none';
-  document.getElementById('swiper-counter').style.display = 'none';
+  swiperItems = [];
+  swiperIndex = 0;
+
+  // Image
+  if (imageSrc) {
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    img.style.cssText = 'flex-shrink:0;width:100%;height:100%;object-fit:cover;background:#0e0018;pointer-events:none;user-select:none;';
+    track.appendChild(img);
+    swiperItems.push('img');
+  }
+
+  // Vidéo
+  if (videoSrc) {
+    const vid = document.createElement('video');
+    vid.src = videoSrc;
+    vid.controls = true;
+    vid.playsInline = true;
+    vid.loop = true;
+    vid.muted = false;
+    vid.style.cssText = 'flex-shrink:0;width:100%;height:100%;object-fit:cover;background:#0e0018;pointer-events:auto;';
+    track.appendChild(vid);
+    swiperItems.push('video');
+  }
+
+  const total = swiperItems.length;
+  if (total <= 1) {
+    btnPrev.style.display = 'none';
+    btnNext.style.display = 'none';
+    counter.style.display = 'none';
+  } else {
+    btnPrev.style.display = 'flex';
+    btnNext.style.display = 'flex';
+    counter.style.display = 'block';
+    counter.textContent = `1 / ${total}`;
+  }
+  updateSwiperPosition();
 }
+
+function updateSwiperPosition() {
+  const track = document.getElementById('swiper-track');
+  const counter = document.getElementById('swiper-counter');
+  track.style.transform = `translateX(-${swiperIndex * 100}%)`;
+  if (swiperItems.length > 1) counter.textContent = `${swiperIndex + 1} / ${swiperItems.length}`;
+  // Pause toutes les vidéos sauf celle active
+  track.querySelectorAll('video').forEach((v, i) => {
+    const videoIdx = swiperItems.indexOf('video', 0);
+    if (swiperIndex === videoIdx) { /* laisser l'utilisateur jouer */ }
+    else v.pause();
+  });
+}
+
+function swiperPrev() {
+  if (swiperItems.length <= 1) return;
+  swiperIndex = (swiperIndex - 1 + swiperItems.length) % swiperItems.length;
+  updateSwiperPosition();
+}
+function swiperNext() {
+  if (swiperItems.length <= 1) return;
+  swiperIndex = (swiperIndex + 1) % swiperItems.length;
+  updateSwiperPosition();
+}
+window.swiperPrev = swiperPrev;
+window.swiperNext = swiperNext;
 
 // ── PRODUCT DETAIL ──
 function openProductDetail(key) {
@@ -628,7 +696,10 @@ function openProductDetail(key) {
     btn.onclick = () => { qtyGrid.querySelectorAll('.qty-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); };
     qtyGrid.appendChild(btn);
   });
-  buildProductImage(p.image);
+
+  // Média : image + vidéo si dispo
+  buildProductMedia(p.image, p.video || null);
+
   hideAllPages();
   document.getElementById('product-detail').style.display = 'flex';
   if (tg) tg.BackButton.show();
@@ -683,7 +754,7 @@ document.getElementById('nav-profil').onclick = () => {
 };
 if (tg) tg.BackButton.onClick(() => goToHome());
 
-// ── AVIS (local) ──
+// ── AVIS ──
 let selectedStar = 0;
 document.querySelectorAll('.star').forEach(star => {
   star.addEventListener('click', () => {
@@ -775,7 +846,6 @@ document.getElementById('submit-order-btn').onclick = () => {
     itemsText += `• ${item.title} ${item.qty} (${item.price})\n`;
   });
   message += `\n💰 *Total : ${total}€*\n\n📦 *Mode :* ${mode}\n`;
-  // Save order locally
   commandes.push({
     tgName: tgUser?.first_name || 'Invité',
     items: itemsText.trim(),
@@ -827,7 +897,6 @@ document.querySelectorAll('.reseau-item[data-link]').forEach(el => {
 
 // ── SPLASH & INIT ──
 document.addEventListener('DOMContentLoaded', () => {
-  // Particles
   const container = document.getElementById('splash-particles');
   const colors = ['#e040fb','#00e5ff','#f97316','#dc2626','#c026d3','#7c3aed'];
   for (let i=0; i<32; i++) {
@@ -837,7 +906,6 @@ document.addEventListener('DOMContentLoaded', () => {
     s.style.cssText = `left:${Math.random()*100}%;top:${40+Math.random()*40}%;--dur:${1.6+Math.random()*2.4}s;--delay:${Math.random()*2.2}s;width:${2+Math.random()*4}px;height:${2+Math.random()*4}px;opacity:0;background:${c};box-shadow:0 0 8px ${c},0 0 16px ${c};`;
     container.appendChild(s);
   }
-  // Init app immediately, hide splash after delay
   populateFilters();
   renderProducts();
   updateBadge();
@@ -852,4 +920,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 </body>
-</html
+</html>
