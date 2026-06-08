@@ -265,7 +265,7 @@ nav { position:fixed; bottom:18px; left:12px; right:12px; height:64px; backgroun
   <div id="products-header">
     <div class="products-title"><span style="font-size:1.4rem">🛍️</span>Catalogue</div>
     <div id="products-count-modern" class="products-count">
-      <div class="products-count-number">8</div>
+      <div class="products-count-number">9</div>
       <div class="products-count-label">Produits</div>
     </div>
   </div>
@@ -537,6 +537,12 @@ const products = {
     image:'jaune.jpg', video:'jaune.mp4', extraVideos:[],
     strain:'', description:'',
     quantities:[{qty:'5g',price:'40€'},{qty:'10g',price:'80€'},{qty:'50g',price:'180€'},{qty:'100g',price:'350€'}]
+  },
+  dry_120u: {
+    key:'dry_120u', title:'🍫Dry 120u', category:'Swiss Farms', farm:'Swiss Farms',
+    image:'dry.jpg', video:'dry.mp4', extraVideos:[],
+    strain:'', description:'',
+    quantities:[{qty:'10g',price:'90€'},{qty:'20g',price:'180€'},{qty:'50g',price:'230€'},{qty:'100g',price:'450€'}]
   }
 };
 
@@ -585,7 +591,6 @@ function renderProducts(list) {
   list.forEach(p => {
     const card = document.createElement('div');
     card.className = 'card';
-    // Pour les produits sans image, afficher un placeholder vidéo
     if (p.image) {
       card.innerHTML = `<div class="card-img"><img src="${p.image}" alt="${p.title}"><div class="card-overlay"><div class="card-title">${p.title}</div><div class="card-farm">${p.farm}</div></div></div>`;
     } else {
@@ -613,7 +618,7 @@ function goToHome() {
   scrollToTop();
 }
 
-// ── SWIPER (image + vidéos) ──
+// ── SWIPER ──
 let swiperIndex = 0;
 let swiperItems = [];
 
@@ -626,7 +631,6 @@ function buildProductMedia(imageSrc, videoSrc, extraVideos) {
   swiperItems = [];
   swiperIndex = 0;
 
-  // Image
   if (imageSrc) {
     const img = document.createElement('img');
     img.src = imageSrc;
@@ -635,7 +639,6 @@ function buildProductMedia(imageSrc, videoSrc, extraVideos) {
     swiperItems.push('img');
   }
 
-  // Toutes les vidéos
   const allVideos = [];
   if (videoSrc) allVideos.push(videoSrc);
   if (extraVideos && extraVideos.length) allVideos.push(...extraVideos);
